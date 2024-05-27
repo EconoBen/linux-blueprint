@@ -1,6 +1,7 @@
 .PHONY: up build run connect docker \
 		prune stop shellcheck yamllint \
-		freeze check source
+		freeze check source test docker-on \
+		docker-off
 
 build: # Build the Docker Image:
 	docker build -t ubuntu_base .
@@ -25,33 +26,40 @@ prune: # remove all stopped containers, all dangling images, and all unused netw
 
 source:
 	@rich --print "[bold blue]Sourcing the virtual environment...[/bold blue]"
-	@echo "-----------------------------------"
+	@rich --print "[green]-----------------------------------[/green]"
 	@source .venv/bin/activate
-	@echo "-----------------------------------"
+	@rich --print "[green]-----------------------------------[/green]"
 
 shellcheck:
 	@rich --print "[bold blue]Linting shell scripts with shellcheck...[/bold blue]"
-	@echo "-----------------------------------"
+	@rich --print "[green]-----------------------------------[/green]"
 	uv pip install shellcheck-py
 	@find . -name "*.sh" -not -path "./.venv/*" | xargs shellcheck
 
 yamllint:
 	@rich --print "[bold blue]Linting YAML files with yamllint...[/bold blue]"
-	@echo "-----------------------------------"
+	@rich --print "[green]-----------------------------------[/green]"
 	uv pip install yamllint
 	@yamllint .
 
 freeze:
 	@rich --print "[bold blue]Freezing requirements...[/bold blue]"
-	@echo "-----------------------------------"
+	@rich --print "[green]-----------------------------------[/green]"
 	@uv pip freeze > requirements.txt
-	@echo "-----------------------------------"
+	@rich --print "[green]-----------------------------------[/green]"
+
+test:
+	@rich --print "[bold blue]Running tests...[/bold blue]"
+	@rich --print "[green]-----------------------------------[/green]"
+	./build.mac.sh
+	@rich --print "[green]-----------------------------------[/green]"
 
 check:
 	@rich --print "[bold blue]Running all checks...[/bold blue]"
-	@echo "-----------------------------------"
-	@$(MAKE) ruff
+	@rich --print "[green]-----------------------------------[/green]"
 	@$(MAKE) shellcheck
 	@$(MAKE) yamllint
-	@echo "-----------------------------------"
+	@$(MAKE) test
+	@$(MAKE) freeze
+	@rich --print "[green]-----------------------------------[/green]"
 	@rich --print "[bold green]All checks passed![/bold green]"
