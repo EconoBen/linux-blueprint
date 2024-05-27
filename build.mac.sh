@@ -12,10 +12,9 @@ rich "[bold magenta]Starting setup process...[/bold magenta]" --print
 rich "[bold yellow]Building the Docker image...[/bold yellow]" --print
 docker stop ubuntu_base_instance || true
 docker rm ubuntu_base_instance || true
-docker build -t ubuntu_base .
 
-# Check if the build was successful
-if [ $? -ne 0 ]; then
+# Directly check the command execution
+if ! docker build -t ubuntu_base .; then
     rich "[bold red]Docker build failed, exiting...[/bold red]" --print
     exit 1
 else
@@ -32,11 +31,8 @@ sleep 5
 # Step 3: Execute structure tests
 rich "[bold yellow]Executing structure tests...[/bold yellow]" --print
 
-# Run the container structure tests
-container-structure-test test --image ubuntu_base --config config.yaml
-
-# Check if tests were successful
-if [ $? -ne 0 ]; then
+# Directly check the command execution
+if ! container-structure-test test --image ubuntu_base --config config.yaml; then
     rich "[bold red]Structure tests failed.[/bold red]" --print
     exit 1
 else

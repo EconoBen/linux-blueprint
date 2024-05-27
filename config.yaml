@@ -1,3 +1,4 @@
+---
 schemaVersion: '2.0.0'
 commandTests:
   - name: "Check Python Version"
@@ -32,4 +33,5 @@ fileContentTests:
 metadataTest:
   envVars:
     - key: "PATH"
-      value: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"  # Just check if PATH is set
+      value: >-
+        /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
