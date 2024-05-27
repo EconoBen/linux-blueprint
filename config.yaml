@@ -1,0 +1,35 @@
+schemaVersion: '2.0.0'
+commandTests:
+  - name: "Check Python Version"
+    command: "/root/.pyenv/versions/3.12.1/bin/python"
+    args: ["--version"]
+    expectedOutput: ["Python 3.12.1"]
+  - name: 'Starship Version Check'
+    command: 'starship'
+    args: ['--version']
+    expectedOutput: ['starship [0-9]+.[0-9]+.[0-9]+']
+
+fileExistenceTests:
+  - name: "Check zshrc"
+    path: "/root/.zshrc"
+    shouldExist: true
+
+  - name: "Check for UV binary"
+    path: "/root/.cargo/bin/uv"
+    shouldExist: true
+
+  - name: 'Starship Config File Existence'
+    path: '/root/.config/starship.toml'
+    shouldExist: true
+    permissions: '-rw-r--r--'
+
+fileContentTests:
+  - name: 'Starship Config Content Verification'
+    path: '/root/.config/starship.toml'
+    expectedContents:
+      - 'add_newline = true'
+
+metadataTest:
+  envVars:
+    - key: "PATH"
+      value: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"  # Just check if PATH is set
